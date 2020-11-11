@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Game
   def display_board(board)
     puts ''
@@ -40,7 +38,7 @@ class Game
       print 'Blank can not be used. Enter the correct name: '
       name = gets.chomp
     end
-    name
+    name.upcase
   end
 
   def players_name
@@ -57,12 +55,8 @@ class Game
     loop do
       break if (1..9).include?(position) && !board[position - 1].is_a?(String)
 
-      unless (1..9).include?(position)
-        print 'Please enter valid number from 1 to 9: '
-  end
-      if board[position - 1].is_a?(String)
-        print "It's already taken. Please choose another position: "
-  end
+      print 'Please enter valid number from 1 to 9: ' unless (1..9).include?(position)
+      print "It's already taken. Please choose another position: " if board[position - 1].is_a?(String)
       position = gets.chomp.to_i
     end
     position
@@ -79,28 +73,19 @@ class Game
     puts "#{player2.name} will be using '#{player2.symbol}'"
   end
 
-  def game_play(current_player, game_board, player1, player2)
-    loop do
-      print "#{current_player.symbol} #{current_player.name}: "
-      print 'Which position do you want to take?: '
-      position = gets.chomp.to_i
-      position = validated_position(position, game_board.board)
-      game_board.update_board(current_player, position, player1, player2)
-
-      if game_board.win?
-        display_board(game_board.board)
-        puts 'Congratulations!'
-        puts "#{current_player.name} is the winner!"
-        puts ''
-        break
-      elsif game_board.draw?
-        display_board(game_board.board)
-        puts 'Oops. The game is over!'
-        puts ''
-        break
-      end
+  def game_over?(game_board, current_player)
+    if game_board.win?
       display_board(game_board.board)
-      current_player = player1.switched_player(current_player, player2)
+      puts 'Congratulations!'
+      puts "#{current_player.name} is the winner!"
+      puts ''
+      return true
+    elsif game_board.draw?
+      display_board(game_board.board)
+      puts 'Oops. The game is over!'
+      puts ''
+      return true
     end
+    false
   end
 end
