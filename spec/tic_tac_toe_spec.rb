@@ -43,7 +43,7 @@ describe Board do
 
   describe '#win?' do
     it 'returns true if either player wins' do
-      game_board.board = [1, 2, 3, '●', '●', '●', '7', '8', '9']
+      game_board.board = [1, 2, 3, '●', '●', '●', 7, 8, 9]
       expect(game_board.win?).to eql(true)
     end
   end
